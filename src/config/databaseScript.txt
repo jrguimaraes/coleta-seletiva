@@ -1,8 +1,0 @@
-CREATE DATABASE coleta;
-
-CREATE TABLE pontos_coletas (
-    id SERIAL PRIMARY KEY NOT NULL,
-    nome TEXT,
-    latitude DECIMAL,
-    longitude DECIMAL
-);

@@ -1,5 +1,7 @@
-import db from './config/database.js';
+import { db, db_padrao } from './config/database.js';
 
+const banco = 'coleta';
+const tabela = 'pontos_coletas';
 const pontosColeta = [
     { name: 'Avelar', lat: -22.321248326590613, long: -43.40334993342208 },
     { name: 'Bela Vista', lat: -22.40514296180025, long: -43.447566380564616 },
@@ -13,16 +15,44 @@ const pontosColeta = [
     { name: 'Palmares', lat: -22.45139908459516, long: -43.403445435078886 },
 ];
 
+async function criaBanco (nomeBanco) {
+        await db_padrao.query(`CREATE DATABASE ${nomeBanco};`);
+        return console.log(`Banco: ${nomeBanco} criado.`);;
+}
+
+async function criaTabela (nomeTabela) {
+        await db.query(
+        `CREATE TABLE ${nomeTabela} (
+            id SERIAL PRIMARY KEY NOT NULL,
+            nome TEXT,
+            latitude DECIMAL,
+            longitude DECIMAL
+        );`
+        );
+        return console.log(`Tabela ${nomeTabela} criada`);;
+}
+
 async function inserePontoNoBanco (ponto) {
     try {
-        const result = await db.query(
+        await db.query(
         `INSERT INTO pontos_coletas (nome, latitude, longitude) VALUES ($1, $2, $3)`,
         [ponto.name, ponto.lat, ponto.long],
         );
-        return console.log(`Ponto ${ponto.name} inserido no banco`);
+        return console.log(`Ponto ${ponto.name} no banco`);
     } catch (erro) {
         console.log(`${erro.message} - Erro ao inserir pontos de coleta`);
     }
 }
 
-pontosColeta.forEach(inserePontoNoBanco);
+async function criaBancoDados (nomeBanco, nomeTabela) {
+    try {
+        await criaBanco(nomeBanco);
+        await criaTabela(nomeTabela);
+        pontosColeta.forEach(inserePontoNoBanco);
+        return console.log(`pontos de coletas inseridos na tabela: ${nomeTabela} do banco: ${nomeBanco}`);
+    } catch (erro) {
+        console.log(`${erro.message} - Erro ao inserir pontos de coleta na tabela:${nomeTabela} do banco:${nomeBanco}`);
+    }
+} 
+
+await criaBancoDados (banco, tabela);
