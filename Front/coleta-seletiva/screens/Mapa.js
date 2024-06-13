@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import {FabButton} from '../assets/components/Fabbutton';
+import { FabButton } from '../assets/components/Fabbutton';
 
 
 function Mapa() {
@@ -15,22 +15,22 @@ function Mapa() {
 
   async function fetchMarkerList() {
     await fetch(`${baseURL}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
-        .then(data => {
-            return data.json();
-        })
-        .then(data => {
-            console.log('aqui')
-            setMarkerList(data);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-}
+      .then(data => {
+        return data.json();
+      })
+      .then(data => {
+        console.log('aqui')
+        setMarkerList(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 
 
   useEffect(() => {
@@ -55,7 +55,7 @@ function Mapa() {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      
+
       <MapView loadingEnabled={true}
         region={
           {
@@ -75,26 +75,42 @@ function Mapa() {
           const latitude = parseFloat(marker.latitude)
           const longitude = parseFloat(marker.longitude)
 
-          return ( 
+          return (
 
-          <Marker coordinate={
-            {
-              
-              latitude: latitude,
-              longitude: longitude,
-              latitudeDelta: 0,
-              longitudeDelta: 1000,
+            <Marker coordinate={
+              {
+
+                latitude: latitude,
+                longitude: longitude,
+                latitudeDelta: 0,
+                longitudeDelta: 1000,
+
+              }
 
             }
-          
-          }
-            title={marker.name}
-            description='Ponto de entrega'
-          />
-        )
-      }
+              title={marker.name}
+              description='Ponto de entrega'
+            />
+          )
+        }
         )}
       </MapView>
+      <View style={{ position: 'absolute', bottom: 20, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#73A252',
+            borderColor:"#FFF",
+            borderWidth: 1,
+            borderRadius: 90,
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            alignItems: 'center',
+          }}
+          //onPress={onPress}
+        >
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white'}}>Câmera</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -129,11 +145,11 @@ const styles = StyleSheet.create({
   },
   floatingButtonStyle: {
     resizeMode: 'contain',
-    backgroundColor:"#FFF",
-    borderRadius:10,
-    maxWidth:"100%",
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    maxWidth: "100%",
     width: 80,
-    maxHeight:"100%",
+    maxHeight: "100%",
     height: 80,
   },
 });
