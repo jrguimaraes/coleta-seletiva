@@ -67,6 +67,7 @@ function Mapa() {
         }
         style={{ width: "100%", height: "130%", }}
         customMapStyle={mapStyle}
+        mapType="hybrid"
 
       >
         {markerList.map((marker) => {
