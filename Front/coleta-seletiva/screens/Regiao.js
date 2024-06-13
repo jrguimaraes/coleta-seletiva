@@ -396,11 +396,12 @@ const styles = StyleSheet.create({
     right: 10,
   },
   tableSmall: {
+    top: 100,
     width: 150,
-    height: 'auto',
+    height: '100%',
   },
   tableEnlarged: {
-    width: 430,
+    width: '95%',
     height: 'auto',
   },
 });
