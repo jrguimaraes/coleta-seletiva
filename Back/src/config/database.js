@@ -16,6 +16,7 @@ const pool_padrao = new Pool({
 export const db = {
     query: (text, params) => pool.query(text, params),
 };
+
 export const db_padrao = {
     query: (text, params) => pool_padrao.query(text, params),
 };

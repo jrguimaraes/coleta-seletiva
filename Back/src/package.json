@@ -14,8 +14,12 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "expo": "^51.0.13",
     "express": "^4.19.2",
     "nodemon": "^3.1.0",
     "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "metro": "^0.80.9"
   }
 }
