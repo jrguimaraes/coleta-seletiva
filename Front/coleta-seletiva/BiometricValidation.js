@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, Image } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 
 const BiometricValidation = ({ navigation }) => {
@@ -34,12 +34,18 @@ const BiometricValidation = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Biometric Validation</Text>
+    <View style={{ flex: 1, justifyContent: 'start', alignItems: 'center', backgroundColor: '#73A210', paddingTop:200}}>
+      <Image
+      source={require('../coleta-seletiva/assets/recycle.gif')}
+      style={{width: 300, height: 300}}
+      />
+      <Text 
+      style={{ fontSize:30, fontWeight: 'bold', color:'white'}}
+      >Verificação de identidade</Text>
       {biometricSupported ? (
-        !isAuthenticated && <Text>Waiting for authentication...</Text>
+        !isAuthenticated && <Text style={{ color:'white'}}>Esperando a autenticação por biometria</Text>
       ) : (
-        <Text>Biometric authentication not supported on this device.</Text>
+        <Text>Erro</Text>
       )}
     </View>
   );
