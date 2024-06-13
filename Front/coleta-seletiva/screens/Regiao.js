@@ -1,22 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
-import MapView, { Marker, Callout, Polygon } from "react-native-maps";
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import MapView, { Polygon } from "react-native-maps";
+import { Table, Row, Rows, ScrollView } from 'react-native-table-component';
+
+
+const TableCustom = ({ tableHead, tableData }) => {
+  return (
+    <Table borderStyle={{ borderWidth: 2, borderColor: '#73A252' }}>
+      <Row data={tableHead} style={{ height: 40, backgroundColor: '#73A252' }} textStyle={{ margin: 6, fontWeight: 'bold', fontSize:  18,}} />
+        <Rows data={tableData} textStyle={{ margin: 6 }} />
+    </Table>
+  )
+}
 
 function Regiao() {
 
+  const [isTableEnlarged, setIsTableEnlarged] = useState(false);
+
+  const handleTablePress = () => {
+    setIsTableEnlarged(!isTableEnlarged);
+  };
+
+
   const mapStyle = [{ "featureType": "poi", "elementType": "labels.text.fill", "stylers": [{ "visibility": "off" }] }, { "featureType": "poi", "elementType": "labels.text.stroke", "stylers": [{ "visibility": "off" }] }]
-
-
 
   return (
     <View style={styles.container}>
+
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: -22.427401499870232, 
-          longitude: -43.4240572928549,
+          latitude: -22.428401499870232,
+          longitude: -43.4121572928549,
           latitudeDelta: 0.002305,
-          longitudeDelta: 0.05525,
+          longitudeDelta: 0.08525,
         }}
         customMapStyle={mapStyle}
         showsUserLocation
@@ -326,6 +343,40 @@ function Regiao() {
           fillColor="#71D76A"
         />
       </MapView>
+      
+      <TouchableOpacity
+        style={[
+          styles.tableContainer,
+          isTableEnlarged ? styles.tableEnlarged : styles.tableSmall
+        ]}
+        onPress={handleTablePress}
+      >
+        <TableCustom
+          tableHead={['Nº', 'Bairro']}
+          tableData={[
+            ['1', 'Centro 1'],
+            ['2', 'Centro 2'],
+            ['3', 'Esperanla'],
+            ['4', 'Alto do Recanto'],
+            ['5', 'Encanto'],
+            ['6', 'Recanto'],
+            ['7', 'Mantiqueira'],
+            ['8', 'Acampamento'],
+            ['9', 'Eicaliptos - Araçá'],
+            ['10', 'Capitão Zenóbio'],
+            ['11', 'Goiabal'],
+            ['12', 'Lameirão'],
+            ['13', 'Fortaleza'],
+            ['14', 'Parque Acácias - STA Cecília'],
+            ['16', 'Monte Alegre'],
+            ['17', 'Pedras Ruivas'],
+            ['18', 'Mato Grosso / Grotão']
+          ]}
+          tableStyle={{ flex: 1 }}
+          rowStyle={{ height: 40 }}
+        />
+      </TouchableOpacity>
+         
     </View>
   );
 };
@@ -338,9 +389,20 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-
+  tableContainer: {
+    position: 'absolute',
+    backgroundColor: "#FFF",
+    bottom: 50,
+    right: 10,
+  },
+  tableSmall: {
+    width: 150,
+    height: 'auto',
+  },
+  tableEnlarged: {
+    width: 430,
+    height: 'auto',
+  },
 });
-
-
 
 export default Regiao;
