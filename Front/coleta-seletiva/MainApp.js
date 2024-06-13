@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Mapa from './screens/Mapa';
-import Screen3 from './screens/Screen3';
+import Pontos from './screens/Pontos';
 import Regiao from './screens/Regiao';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -18,7 +18,7 @@ const MainApp = () => {
             iconName = focused
               ? 'pin'
               : 'pin-outline';
-          } else if (route.name === 'Screen3') {
+          } else if (route.name === 'Pontos') {
             iconName = focused 
               ? 'menu'
               : 'menu-outline';
@@ -39,7 +39,7 @@ const MainApp = () => {
       })}
     >
       <Tab.Screen name="Mapa" component={Mapa} />
-      <Tab.Screen name="Screen3" component={Screen3} />
+      <Tab.Screen name="Pontos" component={Pontos} />
       <Tab.Screen name="Regiao" component={Regiao} />
     </Tab.Navigator>
   );
