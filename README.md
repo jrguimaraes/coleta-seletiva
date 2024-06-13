@@ -4,7 +4,7 @@ Após clonar o repositório seguir os seguintes passos:
 1. criar arquivo .env dentro de Back/src
 
 2. adicionar as variáveis no arquivo .env: PORT, DATABASE_DEFAULT_NAME, DATABASE_NAME e DATABASE_URL
-    Exemplo: PORT=3000
+    - Exemplo: PORT=3000
              DATABASE_DEFAULT_NAME=postgres
              DATABASE_NAME=coleta
              DATABASE_URL=postgres://postgres:1234@localhost:5432
