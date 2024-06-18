@@ -56,7 +56,8 @@ async function criaTabelaPontosColetas () {
             tipo_material TEXT,
             latitude DECIMAL,
             longitude DECIMAL,
-            regiao INT references regioes(id)
+            regiao INT references regioes(id),
+            imagem TEXT
         );`
         );
         return console.log(`Tabela pontos_coletas criada`);
