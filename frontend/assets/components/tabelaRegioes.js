@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
+import axios from 'axios';
 
 const TabelaRegioes = () => {
-    
     const [visibleItem, setVisibleItem] = useState(null);
+    const [details, setDetails] = useState({});
 
-    // Lista de nomes especificados
     const data = [
         { id: 1, name: 'Centro 1' },
         { id: 2, name: 'Centro 2' },
@@ -26,19 +26,44 @@ const TabelaRegioes = () => {
         { id: 17, name: 'Pedras Ruivas' },
         { id: 18, name: 'Mato Grosso / Grotão' }
     ];
+    
+    const fetchDetails = async (id) => {
+
+
+        try {
+            const response = await axios.get(`https://491d-2804-d84-2188-5d00-3f6e-14b0-277-8b2b.ngrok-free.app/regioes`);
+            setDetails((prevDetails) => ({
+                ...prevDetails,
+                [id]: response.data,
+            }));
+        } catch (error) {
+            console.error('Error fetching details:', error);
+        }
+    };
 
     const toggleVisibility = (id) => {
-        setVisibleItem(visibleItem === id ? null : id);
+        if (visibleItem === id) {
+            setVisibleItem(null);
+        } else {
+            setVisibleItem(id);
+            if (!details[id]) {
+                fetchDetails(id);
+            }
+        }
     };
 
     const renderItem = ({ item }) => (
         <View style={styles.item}>
             <Text style={styles.text}>{item.id}) {item.name}</Text>
             <Button color="#73A252" title="Mostrar Denúncias" onPress={() => toggleVisibility(item.id)} />
-            {visibleItem === item.id && (
+            {visibleItem === item.id && details[item.id] && (
+
                 <View style={styles.details}>
-                    <Text>Fotos de {item.name}</Text>
+                    <Text>Detalhes de {item.name}</Text>
+                    <Text>{details[item.id].description}</Text>
+                    {/* Adicione mais campos conforme necessário */}
                 </View>
+
             )}
         </View>
     );
@@ -58,9 +83,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor:"#FFF",
-        borderWidth:2,
-        borderBlockColor:"#73A252"
+        backgroundColor: "#FFF",
+        borderWidth: 2,
+        borderBlockColor: "#73A252"
     },
     item: {
         padding: 15,
@@ -69,7 +94,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 18,
-        fontWeight:"bold"
+        fontWeight: "bold"
     },
     details: {
         marginTop: 10,
@@ -77,4 +102,5 @@ const styles = StyleSheet.create({
         backgroundColor: 'lightgrey',
     },
 });
+
 export default TabelaRegioes;
