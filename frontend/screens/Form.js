@@ -33,13 +33,12 @@ const FormPage = () => {
       }
     })
     .then(response => {
-        console.log(`data ${JSON.stringify(response?.data)}`);
-      console.log(`Inserido no banco o ponto de coleta: ${JSON.stringify(response?.data)}`);
+        Alert.alert('Sucesso', 'Formulário enviado com sucesso');
     })
     .catch(error => {
       console.error('Erro ao inserir novo ponto de coleta:', error);
+      Alert.alert('Erro', 'Erro ao criar ponto de coleta');
     });
-
     navigation.navigate('Mapa');
   }
 
@@ -55,12 +54,7 @@ const FormPage = () => {
       regiao,
     };
     console.log('Dados do formulário:', formData);
-    const result = await createMarker(formData);
-    if (!result) {
-        Alert.alert('Erro', 'Erro ao criar ponto de coleta');
-        return;
-    }
-    Alert.alert('Sucesso', 'Formulário enviado com sucesso');
+    await createMarker(formData);
   };
 
   getRegions = async () => {
