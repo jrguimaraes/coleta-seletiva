@@ -4,7 +4,7 @@ import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { FAB } from 'react-native-paper'
 
 import Regioes from '../assets/components/regioes';
-import TableCustom from '../assets/components/Table';
+import TabelaRegioes from '../assets/components/tabelaRegioes';
 
 function Regiao() {
 
@@ -38,7 +38,7 @@ function Regiao() {
 
       {isVisible && (
 
-        <TableCustom></TableCustom>
+        <TabelaRegioes></TabelaRegioes>
 
       )}
 
