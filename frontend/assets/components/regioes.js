@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import MapView, { Marker, Polygon } from "react-native-maps";
 import { Table, Row, Rows, ScrollView } from 'react-native-table-component';
+import { FAB } from 'react-native-paper'
 
 const Regioes = () => {
 
@@ -10,12 +11,12 @@ const Regioes = () => {
 
     return (
         <MapView
-        style={styles.map}
+        style={stylesMap.map}
         initialRegion={{
           latitude: -22.428401499870232,
-          longitude: -43.4121572928549,
+          longitude: -43.4261572928549,
           latitudeDelta: 0.002305,
-          longitudeDelta: 0.08525,
+          longitudeDelta: 0.05525,
         }}
         customMapStyle={mapStyle}
         showsUserLocation
@@ -45,7 +46,7 @@ const Regioes = () => {
         <Marker
           coordinate={{ latitude: -22.424659717895494, longitude: -43.42390921664527 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             1
           </Text>
 
@@ -72,7 +73,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.43161620276188, longitude: -43.422209855725455 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             2
           </Text>
 
@@ -102,7 +103,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.43486992278369, longitude: -43.427186555562066 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             3
           </Text>
 
@@ -127,7 +128,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.42729649108769, longitude: -43.42730793848491 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             4
           </Text>
 
@@ -155,7 +156,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.428699009615556, longitude: -43.43258809562862 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             5
           </Text>
 
@@ -179,7 +180,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.430269813543557, longitude: -43.42852176771334 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             6
           </Text>
 
@@ -205,7 +206,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.421966791459536, longitude: -43.430099745710315 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             7
           </Text>
 
@@ -229,7 +230,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.414785398984982, longitude: -43.426761715332105 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             8
           </Text>
 
@@ -253,7 +254,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.418993291184112, longitude: -43.42281677033967 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             9
           </Text>
 
@@ -281,7 +282,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.419778750274865, longitude: -43.414319965740596 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             10
           </Text>
 
@@ -310,7 +311,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.427072086808284, longitude: -43.415655177891885 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             11
           </Text>
 
@@ -338,7 +339,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.42325715856061, longitude: -43.408736351289775 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             12
           </Text>
 
@@ -364,7 +365,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.420620308656627, longitude: -43.40394172583744 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             13
           </Text>
 
@@ -386,7 +387,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.430886910223197, longitude: -43.43890000761651 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             14
           </Text>
 
@@ -410,7 +411,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.439245494942963, longitude: -43.44017452830636 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             15
           </Text>
 
@@ -433,7 +434,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.440143031150896, longitude: -43.448064418291224 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             16
           </Text>
 
@@ -459,7 +460,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.44070398833224, longitude: -43.43665442354389 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             17
           </Text>
 
@@ -485,7 +486,7 @@ const Regioes = () => {
 
           coordinate={{ latitude: -22.439582071701384, longitude: -43.43210256393724 }}
         >
-          <Text style={styles.Text}>
+          <Text style={stylesMap.Text}>
             18
           </Text>
 
@@ -504,11 +505,14 @@ const Regioes = () => {
           strokeColor="#FFF"
           fillColor="#71D76A"
         />
+
       </MapView>
+
+      
     )
 }
 
-const styles = StyleSheet.create({
+const stylesMap = StyleSheet.create({
     Text: {
         backgroundColor: '#FFF',
         paddingHorizontal: 5,

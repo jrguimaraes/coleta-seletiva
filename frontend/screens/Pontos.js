@@ -1,11 +1,11 @@
 import { SafeAreaView, ScrollView, Text, StyleSheet } from 'react-native';
-
-
 import TableCustom from '../assets/components/Table';
 
 const Pontos = () => {
     return (
         <SafeAreaView style={styles.container}>
+
+
             <ScrollView>
                 <Text style={styles.textTitle}>COLETA SEMANAL DE MATERIAL DE PODA</Text>
                 <Text style={styles.textSubtitle}>Porta-a-porta e dias diversificados</Text>
