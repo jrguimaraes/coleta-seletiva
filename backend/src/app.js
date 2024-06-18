@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 
 const app = express();
@@ -8,8 +9,8 @@ import pontoColetaRoute from './api/routes/ponto-coleta.js';
 import regiaoRoute from './api/routes/regiao.js';
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.json({ type: 'application/vnd.api+json' }));
+app.use(bodyParser.json({limit: '500mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(cors());
 
 app.use(index);

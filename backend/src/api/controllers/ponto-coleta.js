@@ -6,7 +6,7 @@ class PontoColetaController {
         try {
             const response = await db.query(
                 `SELECT
-                    id, nome, latitude, longitude
+                    id, nome, latitude, longitude, tipo_material, regiao, imagem
                 FROM 
                     pontos_coletas`,
             );
@@ -23,7 +23,7 @@ class PontoColetaController {
             const pontoColetaId = parseInt(req.params.id);
             const response = await db.query(
                 `SELECT
-                     nome, latitude, longitude
+                     id, nome, latitude, longitude, tipo_material, regiao, imagem
                 FROM 
                     pontos_coletas
                 WHERE 
@@ -38,18 +38,18 @@ class PontoColetaController {
 
     async criarPontoColeta (req, res) {
         try {
-            const { nome, latitude, longitude, regiao, imagem } = req.body;
+            const { nome, tipo_material, latitude, longitude, regiao, imagem } = req.body;
             const response = await db.query( 
                 `INSERT INTO
-                    pontos_coletas (nome, latitude, longitude, regiao, imagem) 
+                    pontos_coletas (nome, tipo_material, latitude, longitude, regiao, imagem) 
                 VALUES
-                    ($1, $2, $3, $4, $5)`,[nome, latitude, longitude, regiao, imagem],
+                    ($1, $2, $3, $4, $5, $6)`,[nome, tipo_material, latitude, longitude, regiao, imagem],
             );
         
             res.status(201).send({
                 message: 'Ponto de coleta criado com sucesso!',
                 body: {
-                    ponto: { nome, latitude, longitude, regiao },
+                    ponto: { nome, tipo_material, latitude, longitude, regiao },
                 },
             });    
         } catch (erro) {

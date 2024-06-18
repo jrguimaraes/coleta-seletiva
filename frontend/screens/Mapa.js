@@ -1,32 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
+import React, { useState, useEffect, useRef, useCallback  } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text, Image, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import {requestForegroundPermissionsAsync, getCurrentPositionAsync} from 'expo-location';
 import {Camera, CameraType} from "expo-camera/legacy";
 import axios from 'axios';
+import { useNavigation, useFocusEffect  } from '@react-navigation/native';
 
-const baseUrl = 'https://51d6-2804-18-487c-e352-8649-34f5-976f-a39b.ngrok-free.app';
+
+const baseUrl = 'https://491d-2804-d84-2188-5d00-3f6e-14b0-277-8b2b.ngrok-free.app';
 
 function Mapa() {
   const [cameraOpen, setCameraOpen] = useState(false);
-  const [permission, setPermission] = useState(null);
-  const [imgUri, setImgUri] = useState(null);
+  const [markerList, setMarkerList] = useState([]);
   const cameraRef = useRef(null);
+  const navigation = useNavigation();
 
   async function requestLocationPermission() {
-    const {granted} = await requestForegroundPermissionsAsync();
-
-    if (granted) {
-        const currentPosition = await getCurrentPositionAsync();
-        setLocation(currentPosition);
-    }
+    await requestForegroundPermissionsAsync();
   }
 
   useEffect(() => {
     (async () => {
-        const {status} = await Camera.requestCameraPermissionsAsync();
-        setPermission(status === 'granted');
+        await Camera.requestCameraPermissionsAsync();
     })();
     requestLocationPermission();
   }, []); 
@@ -36,23 +32,14 @@ function Mapa() {
         try {
             const photo = await cameraRef.current.takePictureAsync({base64: true, quality: 0.2});
             setCameraOpen(false);
-            setImgUri(photo.base64);
-            //await createMarker();
+            const locationPosition = await Location.getCurrentPositionAsync({});
+
+            navigation.navigate('Form', {imagem: photo.base64, locationPosition});
         } catch (error) {
             console.error('Erro ao capturar a foto:', error);
         }
     }
-};
-
-
-
-
-  const [markerList, setMarkerList] = useState([]);
-  const [newMarkerList, setNewMarkerList] = useState([]);
-
-
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
+  }; 
 
   async function updateMarkerList() {
     axios.get(`${baseUrl}/pontos-coleta/`, {
@@ -69,39 +56,23 @@ function Mapa() {
     });
   }
 
-  async function createMarker(data) {
-    axios.post(`${baseUrl}/pontos-coleta/`, { 
-      "nome": data.nome, // formulario
-      "latitude": data.latitude, // imagem
-      "longitude": data.longitude, // imagem
-      "regiao": data.regiao, // formulario
-      "imagem": data.imagem, // imagem
-    },{
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-    .then(response => {
-      setMarkerList([...markerList, {longitude: data.longitude, latitude: data.latitude}]);
-      console.log(`Inserido no banco o ponto de coleta: ${JSON.stringify(response?.data)}`);
-    })
-    .catch(error => {
-      console.error('Erro ao recuperar os pontos de coleta:', error);
-    });
-  }
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        await updateMarkerList();
+      };
+
+      fetchData();
+    }, [])
+  );
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        setErrorMsg('Permissão da localização negada!');
+        Alert.alert('Permissão da localização negada!');
         return;
       }
-
-      await updateMarkerList();
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location.coords);
     })();
   }, []);
 
@@ -123,7 +94,7 @@ function Mapa() {
   return (
     <View style={{flex:1}}>
         {
-          (!cameraOpen && !imgUri) && (
+          !cameraOpen && (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <MapView loadingEnabled={true}
               region={
@@ -184,7 +155,7 @@ function Mapa() {
                       flexDirection: 'row',
                       alignItems: "flex-end",
                       justifyContent: "space-around"}}>
-                      <TouchableOpacity onPress={() => {setCameraOpen(false); setImgUri(null)}}>
+                      <TouchableOpacity onPress={() => {setCameraOpen(false)}}>
                           <Text style={{fontSize: 18, marginBottom: 10, color: 'white'}}>Voltar</Text>
                       </TouchableOpacity>
                       <TouchableOpacity  onPress={takePicture}>
@@ -195,15 +166,6 @@ function Mapa() {
             </Camera>
           </View>
           )
-        }
-        {
-          imgUri && (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <TouchableOpacity onPress={() => setImgUri(null)}>
-                <Image style={{width: 300, height: 300}} source={{uri: `data:image/png;base64,${imgUri}`}}></Image>
-              </TouchableOpacity>
-            </View>
-            )
         }
     </View>
   );
