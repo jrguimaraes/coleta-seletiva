@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/', pontoColetaController.pegarTodosPontosColetas);
 router.get('/:id', pontoColetaController.pegarPontoColeta);
+router.get('/regiao/:id', pontoColetaController.pegarPontoColetaPelaRegiao);
 router.post('/', pontoColetaController.criarPontoColeta);
 router.put('/:id', pontoColetaController.atualizarPontoColeta);
 router.delete('/:id', pontoColetaController.deletarPontoColeta);

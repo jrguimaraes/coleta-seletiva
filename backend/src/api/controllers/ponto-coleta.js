@@ -36,6 +36,24 @@ class PontoColetaController {
         }
     };
 
+    async pegarPontoColetaPelaRegiao (req, res) {
+        try {
+            const regiaoId = parseInt(req.params.id);
+            const response = await db.query(
+                `SELECT
+                     id, nome, tipo_material, latitude, longitude, regiao, imagem
+                FROM 
+                    pontos_coletas
+                WHERE 
+                    regiao = $1`, [regiaoId]);
+            res.status(200).send(response.rows);    
+        } catch (erro) {
+            res.status(500).send({
+            message: `${erro.message} - Erro ao recuperar o ponto de coleta pela região`
+            });
+        }
+    };
+
     async criarPontoColeta (req, res) {
         try {
             const { nome, tipo_material, latitude, longitude, regiao, imagem } = req.body;
