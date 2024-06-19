@@ -10,7 +10,7 @@ const LoginPage = () => {
   const [senha, setSenha] = useState('');
   const navigation = useNavigation();
 
-  async function createMarker(data) {
+  async function login(data) {
     axios.post(`${baseUrl}/usuarios/login/`, { 
       "email": data.email,
       "senha": data.senha
@@ -39,7 +39,7 @@ const LoginPage = () => {
       email,
       senha,
     };
-    await createMarker(formData);
+    await login(formData);
   };
 
   return (
