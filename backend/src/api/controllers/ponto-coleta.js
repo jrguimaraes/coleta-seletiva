@@ -6,7 +6,7 @@ class PontoColetaController {
         try {
             const response = await db.query(
                 `SELECT
-                    id, nome, latitude, longitude, tipo_material, regiao, imagem
+                    id, nome, latitude, longitude, tipo_material, regiao, imagem, endereco, detalhes
                 FROM 
                     pontos_coletas`,
             );
@@ -23,7 +23,7 @@ class PontoColetaController {
             const pontoColetaId = parseInt(req.params.id);
             const response = await db.query(
                 `SELECT
-                     id, nome, latitude, longitude, tipo_material, regiao, imagem
+                     id, nome, latitude, longitude, tipo_material, regiao, imagem, endereco, detalhes
                 FROM 
                     pontos_coletas
                 WHERE 
@@ -41,7 +41,7 @@ class PontoColetaController {
             const regiaoId = parseInt(req.params.id);
             const response = await db.query(
                 `SELECT
-                     id, nome, tipo_material, latitude, longitude, regiao, imagem
+                     id, nome, tipo_material, latitude, longitude, regiao, imagem, endereco, detalhes
                 FROM 
                     pontos_coletas
                 WHERE 
@@ -56,18 +56,18 @@ class PontoColetaController {
 
     async criarPontoColeta (req, res) {
         try {
-            const { nome, tipo_material, latitude, longitude, regiao, imagem } = req.body;
+            const { nome, tipo_material, latitude, longitude, regiao, imagem, endereco, detalhes } = req.body;
             const response = await db.query( 
                 `INSERT INTO
-                    pontos_coletas (nome, tipo_material, latitude, longitude, regiao, imagem) 
+                    pontos_coletas (nome, tipo_material, latitude, longitude, regiao, imagem, endereco, detalhes) 
                 VALUES
-                    ($1, $2, $3, $4, $5, $6)`,[nome, tipo_material, latitude, longitude, regiao, imagem],
+                    ($1, $2, $3, $4, $5, $6, $7, $8)`,[nome, tipo_material, latitude, longitude, regiao, imagem, endereco, detalhes],
             );
         
             res.status(201).send({
                 message: 'Ponto de coleta criado com sucesso!',
                 body: {
-                    ponto: { nome, tipo_material, latitude, longitude, regiao },
+                    ponto: { nome, tipo_material, latitude, longitude, regiao, endereco, detalhes },
                 },
             });    
         } catch (erro) {

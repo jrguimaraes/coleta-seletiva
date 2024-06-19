@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import Mapa from './Mapa';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import {reverseGeocodeAsync} from "expo-location";
 
 const baseUrl = 'https://ea03-2804-d84-2188-5d00-6b01-af57-169e-3ce8.ngrok-free.app';
 
@@ -15,19 +16,26 @@ const FormPage = () => {
   const [tipoMaterial, setTipoMaterial] = useState('');
   const [regiao, setRegiao] = useState('');
   const [regions, setRegions] = useState([]);
+  const [detalhes, setDetalhes] = useState('');
   const route = useRoute();
   const navigation = useNavigation();
 
   async function createMarker(data) {
     const { imagem, locationPosition } = route.params;
+    const lat = locationPosition.coords.latitude;
+    const long = locationPosition.coords.longitude;
+
+    const endereco = await setarEndereço(lat, long);
 
     axios.post(`${baseUrl}/pontos-coleta/`, { 
       "nome": data.nome, // formulario
       "tipo_material": data.tipoMaterial, // formulario
-      "latitude": locationPosition.coords.latitude, // imagem
-      "longitude": locationPosition.coords.longitude, // imagem
+      "latitude": lat, // imagem
+      "longitude": long, // imagem
+      "endereco": endereco, // imagem
       "regiao": data.regiao, // formulario
       "imagem": imagem, // imagem
+      "detalhes": data.detalhes
     },{
       headers: {
         'Content-Type': 'application/json',
@@ -43,6 +51,17 @@ const FormPage = () => {
     navigation.navigate('Mapa');
   }
 
+  async function setarEndereço(lat, long) {
+    const response = await reverseGeocodeAsync({latitude: lat, longitude: long});
+    if (response && response.length > 0) {
+        const firstResult = response[0];
+        let formattedAddress = firstResult.formattedAddress;
+        return formattedAddress;
+    } else {
+        return 'Endereço não encontrado.';
+    }
+}
+
   const handleSubmit = async () => {
     if (!nome || !tipoMaterial || !regiao) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos');
@@ -53,6 +72,7 @@ const FormPage = () => {
       nome,
       tipoMaterial,
       regiao,
+      detalhes
     };
     console.log('Dados do formulário:', formData);
     await createMarker(formData);
@@ -103,6 +123,14 @@ const FormPage = () => {
           ))}
         </Picker>
       </View>
+
+      <Text style={styles.label}>Detalhes</Text>
+      <TextInput
+        style={styles.input}
+        value={detalhes}
+        onChangeText={setDetalhes}
+        placeholder="Digite os detalhes para esse ponto de coleta"
+      />
 
       <Button title="Enviar" onPress={handleSubmit} />
     </View>
