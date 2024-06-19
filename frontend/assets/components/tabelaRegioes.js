@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
 const baseUrl = 'https://ea03-2804-d84-2188-5d00-6b01-af57-169e-3ce8.ngrok-free.app';
@@ -7,6 +7,19 @@ const baseUrl = 'https://ea03-2804-d84-2188-5d00-6b01-af57-169e-3ce8.ngrok-free.
 const TabelaRegioes = () => {
     const [visibleItem, setVisibleItem] = useState(null);
     const [pontosList, setPontosList] = useState([]);
+
+    const deleteItem = async (itemId) => {
+        console.log(`${baseUrl}/pontos-coleta/${itemId}`);
+        try {
+            const response = await axios.delete(`${baseUrl}/pontos-coleta/${itemId}`);
+            console.log('Item deleted successfully:', response.data);
+            // Atualizar a lista após a exclusão bem-sucedida
+            setPontosList(pontosList.filter(item => item.id !== itemId));
+        } catch (error) {
+            console.error('Error deleting item:', error);
+            // Lide com o erro, mostre uma mensagem de erro, etc.
+        }
+    };
 
     const data = [
         { id: 1, name: 'Centro 1' },
@@ -49,32 +62,46 @@ const TabelaRegioes = () => {
         }
     }, [visibleItem]);
 
-
     const renderItem = ({ item }) => (
         <View style={styles.item}>
             <Text style={styles.text}>{item.id}) {item.name}</Text>
             <Button color="#73A252" title="Mostrar Pontos" onPress={() => toggleVisibility(item.id)} />
             {visibleItem === item.id && (
-
                 <View style={styles.details}>
-
                     {pontosList.map((ponto) => {
-
                         return (
-                            <View style={{borderWidth:2, borderColor:"#000", marginBottom:50}}>
-                                <Text key={ponto.id}>{ponto.nome} / {ponto.tipo_material}</Text>
+                            <View
+                                key={ponto.id}
+                                style={styles.pontoContainer}
+                            >
+                                <Text style={styles.pontoTitulo}>{ponto.nome}</Text>
+                                <Text style={styles.pontoTitulo}>{ponto.tipo_material}</Text>
+                                <Text style={styles.pontoTitulo}>{ponto.endereco}</Text>
+
                                 <Image
-                                    style={{height:300, width:300,}}
+                                    style={styles.image}
                                     source={{
                                         uri: `data:image/png;base64,${ponto.imagem}`,
                                     }}
                                 />
+
+                                <Text style={styles.pontoTitulo}>{ponto.detalhes}</Text>
+
+                                <TouchableOpacity
+                                    style={{
+                                        backgroundColor: '#C61C33',
+                                        padding: 10,
+                                        borderRadius: 5,
+                                        marginTop: 30,
+                                    }}
+
+                                    onPress={() => deleteItem(ponto.id)}
+                                >
+                                    <Text style={{ color: 'white' }}>Marcar como coletado</Text>
+                                </TouchableOpacity>
                             </View>
-                            
                         );
-
                     })}
-
                 </View>
             )}
         </View>
@@ -112,6 +139,25 @@ const styles = StyleSheet.create({
         marginTop: 10,
         padding: 10,
         backgroundColor: 'lightgrey',
+    },
+    pontoContainer: {
+        marginBottom: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    pontoTitulo: {
+        textAlign: 'left',
+        fontSize: 20,
+        fontWeight: 'bold',
+
+    },
+    image: {
+        marginTop: 30,
+        height: 300,
+        width: 300,
+        borderWidth: 2,
+        borderColor: "#73A252",
+        borderRadius: 30,
     },
 });
 
