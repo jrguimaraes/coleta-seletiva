@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import Mapa from './Mapa';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import {reverseGeocodeAsync} from "expo-location";

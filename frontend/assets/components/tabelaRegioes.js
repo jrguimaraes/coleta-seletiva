@@ -37,7 +37,6 @@ const TabelaRegioes = () => {
         if (visibleItem !== null) {
             const fetchPontos = async () => {
                 try {
-                    console.log(`${baseUrl}/pontos-coleta/regiao/${visibleItem}`);
                     const response = await fetch(`${baseUrl}/pontos-coleta/regiao/${visibleItem}`);
                     const json = await response.json();
                     setPontosList(json);

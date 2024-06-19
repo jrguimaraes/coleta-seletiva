@@ -49,7 +49,7 @@ function Mapa() {
     })
     .then(response => {
       setMarkerList(response.data);
-      console.log('Dados recebidos');
+      console.log('Pontos de coletas recebidos');
     })
     .catch(error => {
       console.error('Erro ao recuperar os pontos de coleta:', error);
