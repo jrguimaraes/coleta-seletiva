@@ -33,9 +33,25 @@ const regioes = [
     { id: 18, nome: 'mato grosso / grotão' },
 ];
 
+const usuario = {
+    "email": "teste@teste.com",
+    "senha": "1234"
+};
+
 async function criaBanco () {
-        await db_padrao.query(`CREATE DATABASE coleta;`);
-        return console.log(`Banco coleta criado.`);;
+    await db_padrao.query(`CREATE DATABASE coleta;`);
+    return console.log(`Banco coleta criado.`);;
+}
+
+async function criaTabelaUsuarios () {
+    await db.query(
+    `CREATE TABLE usuarios (
+        id SERIAL PRIMARY KEY NOT NULL,
+        email TEXT UNIQUE,
+        senha TEXT
+    );`
+    );
+    return console.log(`Tabela usuarios criada`);
 }
 
 async function criaTabelaRegioes () {
@@ -49,8 +65,8 @@ async function criaTabelaRegioes () {
 }
 
 async function criaTabelaPontosColetas () {
-        await db.query(
-        `CREATE TABLE pontos_coletas (
+    await db.query(`
+        CREATE TABLE pontos_coletas (
             id SERIAL PRIMARY KEY NOT NULL,
             nome TEXT,
             tipo_material TEXT,
@@ -59,8 +75,23 @@ async function criaTabelaPontosColetas () {
             regiao INT references regioes(id),
             imagem TEXT
         );`
+    );
+    return console.log(`Tabela pontos_coletas criada`);
+}
+
+async function insereUsuarioNoBanco (usuario) {
+    try {
+        await db.query(`
+            INSERT INTO 
+                usuarios (email, senha) 
+            VALUES 
+                ($1, $2)`,
+            [usuario.email, usuario.senha]
         );
-        return console.log(`Tabela pontos_coletas criada`);
+        return;
+    } catch (erro) {
+        console.log(`${erro.message} - Erro ao inserir usuario: ${usuario.email} no banco`);
+    }
 }
 
 async function insereRegiaoNoBanco (regiao) {
@@ -90,6 +121,8 @@ async function inserePontoNoBanco (ponto) {
 async function criaBancoDados () {
     try {
         await criaBanco();
+        await criaTabelaUsuarios();
+        await insereUsuarioNoBanco(usuario);
         await criaTabelaRegioes();
         regioes.forEach(insereRegiaoNoBanco);
         await criaTabelaPontosColetas();
