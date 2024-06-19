@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useNavigation, useFocusEffect  } from '@react-navigation/native';
 
 
-const baseUrl = 'https://491d-2804-d84-2188-5d00-3f6e-14b0-277-8b2b.ngrok-free.app';
+const baseUrl = 'https://ea03-2804-d84-2188-5d00-6b01-af57-169e-3ce8.ngrok-free.app';
 
 function Mapa() {
   const [cameraOpen, setCameraOpen] = useState(false);
