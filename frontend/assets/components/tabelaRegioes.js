@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { View, Text, Button, FlatList, StyleSheet, Image } from 'react-native';
 import axios from 'axios';
+
+const baseUrl = 'https://ea03-2804-d84-2188-5d00-6b01-af57-169e-3ce8.ngrok-free.app';
 
 const TabelaRegioes = () => {
     const [visibleItem, setVisibleItem] = useState(null);
-    const [details, setDetails] = useState({});
+    const [pontosList, setPontosList] = useState([]);
 
     const data = [
         { id: 1, name: 'Centro 1' },
@@ -26,44 +28,55 @@ const TabelaRegioes = () => {
         { id: 17, name: 'Pedras Ruivas' },
         { id: 18, name: 'Mato Grosso / Grotão' }
     ];
-    
-    const fetchDetails = async (id) => {
-
-
-        try {
-            const response = await axios.get(`https://491d-2804-d84-2188-5d00-3f6e-14b0-277-8b2b.ngrok-free.app/regioes`);
-            setDetails((prevDetails) => ({
-                ...prevDetails,
-                [id]: response.data,
-            }));
-        } catch (error) {
-            console.error('Error fetching details:', error);
-        }
-    };
 
     const toggleVisibility = (id) => {
-        if (visibleItem === id) {
-            setVisibleItem(null);
-        } else {
-            setVisibleItem(id);
-            if (!details[id]) {
-                fetchDetails(id);
-            }
-        }
+        setVisibleItem(visibleItem === id ? null : id);
     };
+
+    useEffect(() => {
+        if (visibleItem !== null) {
+            const fetchPontos = async () => {
+                try {
+                    console.log(`${baseUrl}/pontos-coleta/regiao/${visibleItem}`);
+                    const response = await fetch(`${baseUrl}/pontos-coleta/regiao/${visibleItem}`);
+                    const json = await response.json();
+                    setPontosList(json);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+
+            fetchPontos();
+        }
+    }, [visibleItem]);
+
 
     const renderItem = ({ item }) => (
         <View style={styles.item}>
             <Text style={styles.text}>{item.id}) {item.name}</Text>
-            <Button color="#73A252" title="Mostrar Denúncias" onPress={() => toggleVisibility(item.id)} />
-            {visibleItem === item.id && details[item.id] && (
+            <Button color="#73A252" title="Mostrar Pontos" onPress={() => toggleVisibility(item.id)} />
+            {visibleItem === item.id && (
 
                 <View style={styles.details}>
-                    <Text>Detalhes de {item.name}</Text>
-                    <Text>{details[item.id].description}</Text>
-                    {/* Adicione mais campos conforme necessário */}
-                </View>
 
+                    {pontosList.map((ponto) => {
+
+                        return (
+                            <View style={{borderWidth:2, borderColor:"#000", marginBottom:50}}>
+                                <Text key={ponto.id}>{ponto.nome} / {ponto.tipo_material}</Text>
+                                <Image
+                                    style={{height:300, width:300,}}
+                                    source={{
+                                        uri: `data:image/png;base64,${ponto.imagem}`,
+                                    }}
+                                />
+                            </View>
+                            
+                        );
+
+                    })}
+
+                </View>
             )}
         </View>
     );
